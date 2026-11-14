@@ -323,7 +323,10 @@ u32 gc_read(u32 chan, u8 *buf)
 #endif
 
 #if defined(HOOK_SETFMT)
-/* WPADSetDataFormat(chan, fmt): with no Wii Remote there is nothing to tell, so record the format and report success. */
+/* WPADSetDataFormat(chan, fmt): with no Wii Remote there is nothing to tell, so record the format and report success.
+ * The game asks for a Nunchuk format (Vague Rant's hook makes it treat the Classic Controller as a Nunchuk); with a
+ * real Classic Controller attached the format KPAD sees is the matching Classic one, and KPAD parses the record by
+ * that format, so do the same or KPAD reads the Classic sticks as Nunchuk bytes and loses the left stick. */
 u32 gc_setfmt(u32 chan, u32 fmt)
 {
     u32 h, l;
@@ -334,6 +337,8 @@ u32 gc_setfmt(u32 chan, u32 fmt)
     b = wpd(chan);
     if (*(s32 *)(b + (0x8BC - WPAD_SHIFT)) != -1)
         return 0;
+    if (fmt >= 3 && fmt <= 5)           /* WPAD_FMT_FS_BTN* -> WPAD_FMT_CLASSIC_BTN* */
+        fmt += 3;
     *(u32 *)(b + (0x8B8 - WPAD_SHIFT)) = fmt;
     return 1;
 }

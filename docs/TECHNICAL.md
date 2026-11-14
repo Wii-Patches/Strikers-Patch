@@ -52,7 +52,7 @@ The game links the SI library but not PAD, so nothing polls the pads. Four hooks
 | `FRAME` | input manager frame update | runs the SI poller; calls the connect callback for every port a pad answers on |
 | `PROBE` | `WPADProbe` | polls; reports a Classic Controller (type 2) while a pad answers, including inside KPAD's callback; with no remote, drives KPAD's sampling callback once per frame |
 | `READ` | `WPADRead` | fills the record with the pad as a Classic Controller |
-| `SETFMT` | `WPADSetDataFormat` | accepts any format when there is no remote |
+| `SETFMT` | `WPADSetDataFormat` | accepts the format when there is no remote, turning the Nunchuk formats the game asks for (3–5) into the matching Classic ones (6–8), as WPAD does with a real Classic Controller; KPAD parses the record by this format |
 
 The poller drives the Serial Interface directly (`0xCD006400`): it sets the poll
 command `0x00400300` on all four channels, enables polling for the ports whose

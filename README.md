@@ -16,10 +16,11 @@ Dolphin. Nothing from the game is included in this repository.
 Tested **only in Dolphin**, with scripted pad input. **Not tested on a real
 Wii.** The Korean release is not covered (no dump was available).
 
-- GameCube controller: no Wii Remote needed. Buttons and the control stick
-  reach the game the same way a Classic Controller does. Verified in Dolphin
-  (port 1) on the USA, both European and the Japanese release; the other ports
-  use the same code but were not individually tested (see `tools/dev/`).
+- GameCube controller: no Wii Remote needed. Buttons and both sticks reach the
+  game the same way a Classic Controller does. Verified in Dolphin on the USA
+  release in all four ports (buttons, both sticks, L + R + Start for HOME). The
+  European and Japanese releases run the same code (checked against their
+  `main.dol` by `tools/verify.py`); their buttons were verified in port 1.
 - Patched disc images were checked by extracting the result and comparing its
   `main.dol` with the directly patched one.
 - Classic Controller: Vague Rant's codes, unchanged, in the same three formats.
