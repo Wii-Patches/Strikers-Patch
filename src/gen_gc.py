@@ -24,6 +24,7 @@ HOOKS = (
     ('PROBE', 'WPADProbe', 'WPADProbe: SI poller, the pad as a Classic Controller'),
     ('READ', 'WPADRead', 'WPADRead: Classic Controller record from the pad'),
     ('SETFMT', 'WPADSetDataFormat', 'WPADSetDataFormat: accept a format with no Wii Remote'),
+    ('INFO', 'WPADGetInfo', 'WPADGetInfo: answer for a pad, which never comes back with no Wii Remote'),
     ('FRAME', 'PadFrame', 'input manager frame update: connect a pad as a Wii Remote'),
 )
 

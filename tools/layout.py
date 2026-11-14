@@ -18,7 +18,7 @@ CAVE_LIMIT = 0x80003000
 CC_BASE = 0x80001820          # Classic Controller hook trampolines
 CC_END = 0x80001C00
 GC_BASE = 0x80001C00          # GameCube controller hook trampolines
-GC_END = 0x80002C00
+GC_END = 0x80003000
 
 WINDOWS = {'cc': (CC_BASE, CC_END), 'gc': (GC_BASE, GC_END)}
 

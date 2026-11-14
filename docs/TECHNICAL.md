@@ -44,11 +44,12 @@ the files and checks each original instruction against the DOL.
 
 ## GameCube controller (`src/gc/`)
 
-The game links the SI library but not PAD, so nothing polls the pads. Four hooks
+The game links the SI library but not PAD, so nothing polls the pads. Five hooks
 (compiled with devkitPPC from `gcpad.c`, one copy per hook, per release):
 
 | Hook | Function | Does |
 | --- | --- | --- |
+| `INFO` | `WPADGetInfo` | with no remote, reports a full battery and an attached extension. In the USA and Japanese SDK the call blocks until a status reply arrives; with no remote none ever comes, so the game froze after A on the title screen |
 | `FRAME` | input manager frame update | runs the SI poller; calls the connect callback for every port a pad answers on |
 | `PROBE` | `WPADProbe` | polls; reports a Classic Controller (type 2) while a pad answers, including inside KPAD's callback; with no remote, drives KPAD's sampling callback once per frame |
 | `READ` | `WPADRead` | fills the record with the pad as a Classic Controller |
@@ -74,7 +75,7 @@ combination produces HOME.
 
 `0x80001820..0x80003000` (the Wii's boot-time scratch area; this game's first
 section starts at `0x80004000`). Classic Controller trampolines use
-`0x80001820..0x80001C00`, GameCube ones `0x80001C00..0x80002C00`.
+`0x80001820..0x80001C00`, GameCube ones `0x80001C00..0x80003000`.
 
 ## Testing
 

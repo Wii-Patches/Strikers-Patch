@@ -344,6 +344,32 @@ u32 gc_setfmt(u32 chan, u32 fmt)
 }
 #endif
 
+#if defined(HOOK_INFO)
+/* WPADGetInfo(chan, info): the blocking form sends a status request and sleeps until its callback runs.  With no
+ * Wii Remote the request fails with "no controller", which the wrapper does not treat as an error, so it sleeps
+ * forever (the game asks right after A on the title screen).  Answer for the pad: a remote with a Classic
+ * Controller attached and a full battery. */
+u32 gc_info(u32 chan, u32 *info)
+{
+    u32 h, l, i;
+    u8 *b;
+
+    if (!driven(chan, &h, &l))
+        return 0;
+    b = wpd(chan);
+    if (*(s32 *)(b + (0x8BC - WPAD_SHIFT)) != -1)
+        return 0;
+    if (info) {
+        for (i = 0; i < 5; i++)
+            info[i] = 0;                    /* dpd, speaker, attach, lowBat, nearempty */
+        info[2] = 1;                        /* extension attached */
+        ((u8 *)info)[0x14] = 4;             /* battery level: full */
+        ((u8 *)info)[0x15] = (u8)(1 << chan);   /* player LED */
+    }
+    return 1;
+}
+#endif
+
 #if defined(HOOK_FRAME)
 /* The input manager's per-frame update (r3 = the manager): it reads only the channels whose "connected" flag its
  * WPAD connect callback sets, and no Wii Remote means no callback.  Run the callback ourselves for every port a pad

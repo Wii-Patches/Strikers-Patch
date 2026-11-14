@@ -95,6 +95,12 @@ def resolve(ref, tgt):
     f = Finder(ref, tgt)
     r = {k: f.locate(a, n) for k, (a, n) in FUNCS.items()}
     r['WpadTbl'] = f.pair(0x803CCFE8, 0x805D6170)
+    # WPADGetInfo: the USA/Japanese SDK has a blocking wrapper the European one lacks, so its own bytes do not
+    # match across releases.  Take it from the game's call after the title screen (the battery check).
+    call = f.locate(0x801D2340, 10) + 0x30
+    w = words(tgt, call, 1)[0]
+    assert w >> 26 == 18 and w & 3 == 1, 'WPADGetInfo call site moved'
+    r['WPADGetInfo'] = call + (((w & 0x03FFFFFC) ^ 0x02000000) - 0x02000000)
     r['SiTypes'] = f.pair(0x803C0C6C, 0x8054A750)
     r['SiBusy'] = f.pair(0x803C0314, 0x8054A738)
     # the SI globals sit in one block, in the same order in every release: the transfer-busy flag, the SIPOLL
